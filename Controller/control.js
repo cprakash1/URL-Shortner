@@ -11,18 +11,18 @@ module.exports.postForm=async(req,res)=>{
     // // if(!validUrl.isUri(url))
     // // return res.redirect('/generate');
     const shorturl=generate(url);
-    console.log(url,shorturl);
+    // console.log(url,shorturl);
     const newData=await new urlModel({originalUrl:url,shortUrl:shorturl});
     newData.save();
     res.redirect(`/result/${shorturl}`);
 }
 module.exports.getResult=async(req,res)=>{
     const data=await urlModel.findOne({shortUrl:req.params.id});
-    res.render('result.ejs',{url:data.originalUrl,shortUrl:data.shortUrl});
+    res.render('result.ejs',{url:data.originalUrl,shortUrl:`https://cpurl.onrender.com/${data.shortUrl}`});
 }
 module.exports.redirectRoute=async(req,res)=>{
     const data=await urlModel.findOne({shortUrl:req.params.id});
-    console.log(data);
+    // console.log(data);
     if(data)
     res.redirect(`https://${data.originalUrl}`);
     else res.send("Sorry not available");
